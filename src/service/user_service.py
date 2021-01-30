@@ -21,7 +21,7 @@ class UserService():
         bar = body['bar']
         try:
             user_bar = None
-            bar_data = Bar.query.filter_by(bar=bar.lower()).first()
+            bar_data = Bar.query.filter_by(name=bar.lower()).first()
             if bar_data is None: # no such bar exists in our database - create
                 location_data = Location.query.filter_by(location=body['location']).first()
                 if 'neighborhood' in body: # neighborhood specified
@@ -42,17 +42,20 @@ class UserService():
             db.session.commit()
             return jsonify({'statusCode': 200, 'message': 'user-bar association successfully created'})
         except Exception as e:
+            print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to create new user-bar association'})
 
 
     def create_user_brand(self, body):
         user = body['username']
         brand = body['brand']
+        print('user:', user, "brand:", brand)
+        print('type:', body['type'])
         try:
             user_brand = None
-            brand_data = Brand.query.filter_by(brand=brand.lower()).first()
+            brand_data = Brand.query.filter_by(name=brand.lower()).first()
             if brand_data is None: # no such brand exists in our database - create
-                brand = brand_service.create_brand(body['name'], body['type']) # TODO: are they always gonna be sending in type?
+                brand = brand_service.create_brand(brand, body['type']) # TODO: are they always gonna be sending in type?
                 user_brand = UserBrand(user_name=user.lower(), brand_id = brand.id)
             else: # brand exists in our database
                 brand_id = brand_data.id
@@ -61,6 +64,7 @@ class UserService():
             db.session.commit()
             return jsonify({'statusCode': 200, 'message': 'user-brand association successfully created'})
         except Exception as e:
+            print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to create new user-brand association'})
 
 
@@ -69,9 +73,9 @@ class UserService():
         drink = body['drink']
         try:
             user_drink = None
-            drink_data = Drink.query.filter_by(drink=drink.lower()).first()
+            drink_data = Drink.query.filter_by(name=drink.lower()).first()
             if drink_data is None: # no such drink exists in our database - create
-                drink = drink_service.create_drink(body['name'])
+                drink = drink_service.create_drink(drink)
                 user_drink = UserDrink(user_name=user.lower(), drink_id=drink.id)
             else: # drink exists in our database
                 drink_id = drink_data.id
@@ -80,6 +84,7 @@ class UserService():
             db.session.commit()
             return jsonify({'statusCode': 200, 'message': 'user-drink association successfully created'})
         except Exception as e:
+            print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to create new user-drink association'})
 
 
@@ -92,6 +97,7 @@ class UserService():
             print('bar data:', bar_data)
             return bar_data
         except Exception as e:
+            print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to fetch user-bar associations'})
 
 
@@ -104,6 +110,7 @@ class UserService():
             print('drink data:', drink_data)
             return drink_data
         except Exception as e:
+            print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to fetch user-drink associations'})
 
 
@@ -116,6 +123,7 @@ class UserService():
             print('brand data:', brand_data)
             return brand_data
         except Exception as e:
+            print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to fetch user-brand associations'})
 
 
@@ -142,6 +150,7 @@ class UserService():
             db.session.commit()
             return jsonfiy({'statusCode': 200, 'message': 'successfully deleted user-drink association'})
         except Exception as e:
+            print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to delete user-drink association'})
 
 
@@ -155,6 +164,7 @@ class UserService():
             db.session.commit()
             return jsonfiy({'statusCode': 200, 'message': 'successfully deleted user-bar association'})
         except Exception as e:
+            print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to delete user-bar association'})
 
 
