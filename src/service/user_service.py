@@ -14,18 +14,7 @@ from src.service.brand_service import BrandService as brand_service
 from sqlalchemy import func
 
 class UserService():
- """
- TODO:
-    - get all the bars a user likes
-    - get all the brands a user likes
-    - get all the drinks a user likes (do we combine the above three?)
-    - post a new user_bar (done)
-    - post a new user_brand (done)
-    - post a new user_drink (done)
-    - delete a current user_bar 
-    - delete a current user_brand 
-    - delete a current user_drink 
- """
+
 
     def create_user_bar(self, body):
         user = body['username']
@@ -35,7 +24,7 @@ class UserService():
             bar_data = Bar.query.filter_by(bar=bar.lower()).first()
             if bar_data is None: # no such bar exists in our database - create
                 location_data = Location.query.filter_by(location=body['location']).first()
-                if 'neighborhood' is in body: # neighborhood specified
+                if 'neighborhood' in body: # neighborhood specified
                     nbhood_data = Neighborhood.query.filter_by(neighborhood=body['neighborhood'].lower()).first()
                     if nbhood_data is not None: # neighborhood exists - create bar with it
                         bar_data = bar_service().create_bar(bar_name=bar.lower(), location_id=location_data.id, neighborhood_id=nbhood_data.id)
