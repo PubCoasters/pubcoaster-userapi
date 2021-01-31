@@ -44,19 +44,19 @@ def user_brand():
 @app.route('/brand/<string:username>', methods=['GET'])
 @cross_origin()
 def get_user_brand(username):
-    return user_service.get_user_brand(username)
+    return user_service().get_user_brand(username)
 
 
 @app.route('/drink/<string:username>', methods=['GET'])
 @cross_origin()
 def get_user_drink(username):
-    return user_service.get_user_drink(username)
+    return user_service().get_user_drink(username)
 
 
 @app.route('/bar/<string:username>', methods=['GET'])
 @cross_origin()
 def get_user_bar(username):
-    return user_service.get_user_bar(username)
+    return user_service().get_user_bar(username)
 
 
 if __name__ == '__main__':

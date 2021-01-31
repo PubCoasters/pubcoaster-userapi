@@ -7,6 +7,8 @@ from src.models.user import User
 from src.models.user_bar import UserBar
 from src.models.user_brand import UserBrand
 from src.models.user_drink import UserDrink
+from src.models.location import Location
+from src.models.neighborhood import Neighborhood
 from src.service.bar_service import BarService as bar_service
 from src.service.neighborhood_service import NeighborhoodService as neighborhood_service
 from src.service.drink_service import DrinkService as drink_service
@@ -49,14 +51,14 @@ class UserService():
     def create_user_brand(self, body):
         user = body['username']
         brand = body['brand']
-        print('user:', user, "brand:", brand)
-        print('type:', body['type'])
         try:
+            type_brand = body['type']
             user_brand = None
             brand_data = Brand.query.filter_by(name=brand.lower()).first()
             if brand_data is None: # no such brand exists in our database - create
-                brand = brand_service.create_brand(brand, body['type']) # TODO: are they always gonna be sending in type?
-                user_brand = UserBrand(user_name=user.lower(), brand_id = brand.id)
+                # TODO: are they always gonna be sending in type?
+                brand = brand_service().create_brand(brand, type_brand)
+                user_brand = UserBrand(user_name=user.lower(), brand_id=brand.id)
             else: # brand exists in our database
                 brand_id = brand_data.id
                 user_brand = UserBrand(user_name=user.lower(), brand_id=brand_id)
@@ -75,7 +77,7 @@ class UserService():
             user_drink = None
             drink_data = Drink.query.filter_by(name=drink.lower()).first()
             if drink_data is None: # no such drink exists in our database - create
-                drink = drink_service.create_drink(drink)
+                drink = drink_service().create_drink(drink)
                 user_drink = UserDrink(user_name=user.lower(), drink_id=drink.id)
             else: # drink exists in our database
                 drink_id = drink_data.id
@@ -93,9 +95,13 @@ class UserService():
         Retrieves all the bars a user likes.
         """
         try:
-            bar_data = UserBar.query.filter(user_name=user).all()
-            print('bar data:', bar_data)
-            return bar_data
+            bar_data = UserBar.query.filter_by(user_name=user).all()
+            response = []
+            for item in bar_data:
+                bar_name = Bar.query.filter_by(id=item.bar_id).first()
+                temp = {'user': item.user_name, 'barName': bar_name.name}
+                response.append(temp)
+            return jsonify(response)
         except Exception as e:
             print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to fetch user-bar associations'})
@@ -106,9 +112,13 @@ class UserService():
         Retrieves all the drinks a user likes.
         """
         try:
-            drink_data = UserDrink.query.filter(user_name=user).all()
-            print('drink data:', drink_data)
-            return drink_data
+            drink_data = UserDrink.query.filter_by(user_name=user).all()
+            response = []
+            for item in drink_data:
+                drink_name = Drink.query.filter_by(id=item.drink_id).first()
+                temp = {'user': item.user_name, 'drinkName': drink_name.name}
+                response.append(temp)
+            return jsonify(response)
         except Exception as e:
             print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to fetch user-drink associations'})
@@ -119,9 +129,13 @@ class UserService():
         Retrieves all the brands a user likes.
         """
         try:
-            brand_data = UserBrand.query.filter(user_name=user).all()
-            print('brand data:', brand_data)
-            return brand_data
+            brand_data = UserBrand.query.filter_by(user_name=user).all()
+            response = []
+            for item in brand_data:
+                brand_name = Brand.query.filter_by(id=item.brand_id).first()
+                temp = {'user': item.user_name, 'brandName': brand_name.name}
+                response.append(temp)
+            return jsonify(response)
         except Exception as e:
             print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to fetch user-brand associations'})
@@ -132,10 +146,10 @@ class UserService():
         uuid = body['uuid']
         try:
             brand_data = Brand.query.filter_by(uuid=uuid).first()
-            user_brand = UserBrand.query.filter_by(user=user, brand_id=brand_data.id).first()
+            user_brand = UserBrand.query.filter_by(user_name=user, brand_id=brand_data.id).first()
             db.session.delete(user_brand)
             db.session.commit()
-            return jsonfiy({'statusCode': 200, 'message': 'successfully deleted user-brand association'})
+            return jsonify({'statusCode': 200, 'message': 'successfully deleted user-brand association'})
         except Exception as e:
             return jsonify({'statusCode': 500, 'message': 'unable to delete user-brand association'})
 
@@ -145,24 +159,24 @@ class UserService():
         uuid = body['uuid']
         try:
             drink_data = Drink.query.filter_by(uuid=uuid).first()
-            user_drink = UserDrink.query.filter_by(user=user, drink_id=drink_data.id).first()
+            user_drink = UserDrink.query.filter_by(user_name=user, drink_id=drink_data.id).first()
             db.session.delete(user_drink)
             db.session.commit()
-            return jsonfiy({'statusCode': 200, 'message': 'successfully deleted user-drink association'})
+            return jsonify({'statusCode': 200, 'message': 'successfully deleted user-drink association'})
         except Exception as e:
             print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to delete user-drink association'})
 
 
-    def delete_user_bar(self, body):
+    def delete_user_bar(self, body): # works
         user = body['username']
         uuid = body['uuid']
         try:
             bar_data = Bar.query.filter_by(uuid=uuid).first()
-            user_bar = UserBar.query.filter_by(user=user, bar_id=bar_data.id).first()
+            user_bar = UserBar.query.filter_by(user_name=user, bar_id=bar_data.id).first()
             db.session.delete(user_bar)
             db.session.commit()
-            return jsonfiy({'statusCode': 200, 'message': 'successfully deleted user-bar association'})
+            return jsonify({'statusCode': 200, 'message': 'successfully deleted user-bar association'})
         except Exception as e:
             print(e)
             return jsonify({'statusCode': 500, 'message': 'unable to delete user-bar association'})
