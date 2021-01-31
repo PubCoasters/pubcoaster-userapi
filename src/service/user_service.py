@@ -23,9 +23,9 @@ class UserService():
         bar = body['bar']
         try:
             user_bar = None
-            bar_data = Bar.query.filter_by(name=bar.lower()).first()
+            location_data = Location.query.filter_by(location=body['location']).first()
+            bar_data = Bar.query.filter_by(name=bar.lower(), location_id=location_data.id).first()
             if bar_data is None: # no such bar exists in our database - create
-                location_data = Location.query.filter_by(location=body['location']).first()
                 if 'neighborhood' in body: # neighborhood specified
                     nbhood_data = Neighborhood.query.filter_by(neighborhood=body['neighborhood'].lower()).first()
                     if nbhood_data is not None: # neighborhood exists - create bar with it
