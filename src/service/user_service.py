@@ -18,6 +18,66 @@ from sqlalchemy import func
 class UserService():
 
 
+    def create_user(self, body):
+        try:
+            pic_link = None
+            username = body['username']
+            email = body['email']
+            firstname = body['firstName']
+            lastname = body['lastName']
+            fullname = body['fullName']
+            if (body['picLink']):
+                pic_link = body['picLink']
+            user = User(user_name=username, email=email, first_name=firstname, last_name=lastname, prof_pic=pic_link, full_name=fullname)
+            db.session.add(user)
+            db.session.commit()
+            return jsonify({'statusCode': 200, 'message': 'user successfully created'})
+        except Exception as e:
+            print(e)    
+            return jsonify({'message': 'unable to create user'}), 500
+    
+    def update_user(self, body, username):
+        try:
+            user = User.query.filter_by(user_name=username).first()
+            if (body['username']):
+                user.user_name = body['username']
+            if (body['email']):
+               user.email = body['email']
+            if (body['firstName']):
+                user.first_name = body['firstName']
+            if (body['lastName']):
+                user.lastname = body['lastName']
+            if (body['fullName']):
+                user.fullname = body['fullName'] 
+            if (body['picLink']):
+                user.pic_link = body['picLink']
+            db.session.commit()
+            return jsonify({'statusCode': 200, 'message': 'user successfully updated'})
+        except Exception as e:
+            print(e)
+            return jsonify({'message': 'unable to update user'}), 500
+    
+    def get_user_by_username(self, username):
+        try:
+            user = User.query.filter_by(user_name=username).first()
+            return jsonify({'username': user.user_name, 'firstName': user.first_name, 
+            'lastName': user.last_name, 'fullName': user.full_name, 'email': user.email, 'picLink': user.link_to_prof_pic})
+        except Exception as e:
+            print(e)
+            return jsonify({'message': 'unable to grab post'}), 500
+    
+    def delete_user(self, username):
+        try:
+            user = User.query.filter_by(user_name=username).first()
+            db.session.delete(user)
+            db.session.commit()
+            return jsonify({'statusCode': 200, 'message': 'user successfully deleted'})
+        except Exception as e:
+            print(e)
+            return jsonify({'message': 'unable to delete user'}), 500
+
+
+
     def create_user_bar(self, body):
         user = body['username']
         bar = body['bar']

@@ -58,6 +58,21 @@ def get_user_drink(username):
 def get_user_bar(username):
     return user_service().get_user_bar(username)
 
+@app.route('/user/<string:username>', methods=['GET', 'PATCH', 'DELETE'])
+@cross_origin()
+def user(username):
+    if request.method == 'GET':
+        return user_service().get_user_by_username(username)
+    elif request.method == 'PATCH':
+        return user_service().update_user(request.json, username)
+    else:
+        return user_service().delete_user(username)
+
+@app.route('/user', methods=['POST'])
+@cross_origin()
+def create_user():
+    return user_service().create_user(request.json)
+   
 
 if __name__ == '__main__':
     app.run()

@@ -11,10 +11,11 @@ class User(db.Model):
     last_name = db.Column(db.String(128), nullable=False)
     full_name = db.Column(db.String(128), nullable=False)
 
-    # def __init__(self, user_name, email, prof_pic, first_name, last_name, full_name):
-    #     self.user_name = user_name
-    #     self.email = email
-    #     self.link_to_prof_pic = prof_pic
-    #     self.first_name = first_name
-    #     self.last_name = last_name
-    #     self.full_name = full_name
+    def __init__(self, user_name, email, prof_pic, first_name, last_name, full_name):
+        self.user_name = user_name
+        self.email = email
+        if prof_pic is not None:
+            self.link_to_prof_pic = prof_pic
+        self.first_name = first_name
+        self.last_name = last_name
+        self.full_name = full_name
