@@ -1,19 +1,24 @@
 from flask import Flask, request, jsonify
 import json
+from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Sahil23!@localhost/app_localdb'
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{Config.credentials['username']}:{Config.credentials['password']}/{Config.credentials['schema']}?unix_socket=/cloudsql/{Config.credentials['connectionname']}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 cors = CORS(app)
 
-from src.service.user_service import UserService as user_service
+from service.user_service import UserService as user_service
 
 
+@app.route('/test', methods=['GET'])
+@cross_origin()
+def test():
+    return jsonify({'message': 'test works'})
 @app.route('/user/bar', methods=['POST', 'DELETE'])
 @cross_origin()
 def user_bar():
@@ -74,5 +79,5 @@ def create_user():
     return user_service().create_user(request.json)
    
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     app.run()
