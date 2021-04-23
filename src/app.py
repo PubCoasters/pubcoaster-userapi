@@ -4,6 +4,7 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 import os
+from flask_sslify import SSLify
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{Config.credentials['username']}:{Config.credentials['password']}@/{Config.credentials['schema']}?unix_socket=/cloudsql/{Config.credentials['connectionname']}"
@@ -11,6 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 cors = CORS(app)
+sslify = SSLify(app)
 
 from service.user_service import UserService as user_service
 

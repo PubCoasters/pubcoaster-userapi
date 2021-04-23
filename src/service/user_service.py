@@ -14,6 +14,7 @@ from service.neighborhood_service import NeighborhoodService as neighborhood_ser
 from service.drink_service import DrinkService as drink_service
 from service.brand_service import BrandService as brand_service
 from sqlalchemy import func
+import logging
 
 class UserService():
 
@@ -33,7 +34,8 @@ class UserService():
             db.session.commit()
             return jsonify({'statusCode': 200, 'message': 'user successfully created'})
         except Exception as e:
-            print(e)    
+            print(e)  
+            logging.error(e)  
             return jsonify({'message': 'unable to create user'}), 500
     
     def update_user(self, body, username):
