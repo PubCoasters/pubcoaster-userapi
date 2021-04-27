@@ -1,6 +1,6 @@
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
-from app import db
+from src.app import db
 
 class User(db.Model):
     __tablename__ = 'user'

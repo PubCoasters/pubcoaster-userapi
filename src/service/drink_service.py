@@ -1,6 +1,6 @@
 from flask import request, jsonify
-from app import db
-from models.drink import Drink
+from src.app import db
+from src.models.drink import Drink
 
 class DrinkService():
 

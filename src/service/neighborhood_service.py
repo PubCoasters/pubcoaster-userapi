@@ -1,6 +1,6 @@
 from flask import request, jsonify
-from app import db
-from models.neighborhood import Neighborhood
+from src.app import db
+from src.models.neighborhood import Neighborhood
 
 class NeighborhoodService():
 
