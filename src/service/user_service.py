@@ -98,10 +98,10 @@ class UserService():
                 else: # no neighborhood specified - create bar without neighborhood
                     bar_data = bar_service().create_bar(bar_name=bar, location_id=location_data.id)
                 bar_id = bar_data.id
-                user_bar = UserBar(user_name=user.lower(), bar_id=bar_id)
+                user_bar = UserBar(user_name=user, bar_id=bar_id)
             else: # bar exists in our database
                 bar_id = bar_data.id
-                user_bar = UserBar(user_name=user.lower(), bar_id=bar_id)
+                user_bar = UserBar(user_name=user, bar_id=bar_id)
             db.session.add(user_bar)
             db.session.commit()
             return jsonify({'statusCode': 200, 'message': 'user-bar association successfully created'})
@@ -118,12 +118,11 @@ class UserService():
             user_brand = None
             brand_data = Brand.query.filter_by(name=brand.lower()).first()
             if brand_data is None: # no such brand exists in our database - create
-                # TODO: are they always gonna be sending in type?
                 brand = brand_service().create_brand(brand, type_brand)
-                user_brand = UserBrand(user_name=user.lower(), brand_id=brand.id)
+                user_brand = UserBrand(user_name=user, brand_id=brand.id)
             else: # brand exists in our database
                 brand_id = brand_data.id
-                user_brand = UserBrand(user_name=user.lower(), brand_id=brand_id)
+                user_brand = UserBrand(user_name=user, brand_id=brand_id)
             db.session.add(user_brand)
             db.session.commit()
             return jsonify({'statusCode': 200, 'message': 'user-brand association successfully created'})
@@ -140,10 +139,10 @@ class UserService():
             drink_data = Drink.query.filter_by(name=drink.lower()).first()
             if drink_data is None: # no such drink exists in our database - create
                 drink = drink_service().create_drink(drink)
-                user_drink = UserDrink(user_name=user.lower(), drink_id=drink.id)
+                user_drink = UserDrink(user_name=user, drink_id=drink.id)
             else: # drink exists in our database
                 drink_id = drink_data.id
-                user_drink = UserDrink(user_name=user.lower(), drink_id=drink_id)
+                user_drink = UserDrink(user_name=user, drink_id=drink_id)
             db.session.add(user_drink)
             db.session.commit()
             return jsonify({'statusCode': 200, 'message': 'user-drink association successfully created'})
