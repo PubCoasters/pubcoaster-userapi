@@ -158,11 +158,13 @@ class UserService():
         """
         try:
             bar_data = UserBar.query.filter_by(user_name=user).all()
-            response = []
+            num_bars = db.session.query(db.func.count(UserBar.bar_id)).filter_by(user_name=user).scalar()
+            bars = []
             for item in bar_data:
                 bar_name = Bar.query.filter_by(id=item.bar_id).first()
                 temp = {'user': item.user_name, 'barName': bar_name.name}
-                response.append(temp)
+                bars.append(temp)
+            response = {'totalCount': num_bars, 'bars': bars}
             return jsonify(response)
         except Exception as e:
             print(e)
@@ -175,11 +177,13 @@ class UserService():
         """
         try:
             drink_data = UserDrink.query.filter_by(user_name=user).all()
-            response = []
+            num_drinks = db.session.query(db.func.count(UserDrink.drink_id)).filter_by(user_name=user).scalar()
+            drinks = []
             for item in drink_data:
                 drink_name = Drink.query.filter_by(id=item.drink_id).first()
                 temp = {'user': item.user_name, 'drinkName': drink_name.name}
-                response.append(temp)
+                drinks.append(temp)
+            response = {'totalCount': num_drinks, 'drinks': drinks}
             return jsonify(response)
         except Exception as e:
             print(e)
@@ -192,11 +196,13 @@ class UserService():
         """
         try:
             brand_data = UserBrand.query.filter_by(user_name=user).all()
-            response = []
+            num_brands = db.session.query(db.func.count(UserBrand.brand_id)).filter_by(user_name=user).scalar()
+            brands = []
             for item in brand_data:
                 brand_name = Brand.query.filter_by(id=item.brand_id).first()
                 temp = {'user': item.user_name, 'brandName': brand_name.name}
-                response.append(temp)
+                brands.append(temp)
+            response = {'totalCount': num_brands, 'brands': brands}
             return jsonify(response)
         except Exception as e:
             print(e)
