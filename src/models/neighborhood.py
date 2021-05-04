@@ -10,8 +10,7 @@ class Neighborhood(db.Model):
     location_id = db.Column(db.Integer, ForeignKey('location.id'), nullable=False)
     neighborhood = db.Column(db.String(128), nullable=False)
 
-    def __init__(self, location_id, neighborhood):
-        # self.id = id
-        # self.uuid = uuid
+    def __init__(self, uuid, location_id, neighborhood):
+        self.uuid = uuid
         self.location_id = location_id
         self.neighborhood = neighborhood
