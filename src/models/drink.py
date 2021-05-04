@@ -9,7 +9,6 @@ class Drink(db.Model):
     uuid = db.Column(db.String(128), default=uuid4, nullable=False)
     name = db.Column(db.String(128), nullable=False)
 
-    # def __init__(self, id, uuid, name):
-    #     self.id = id
-    #     self.uuid = uuid
-    #     self.name = name
+    def __init__(self, uuid, name):
+        self.uuid = uuid
+        self.name = name
