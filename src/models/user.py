@@ -20,4 +20,5 @@ class User(db.Model):
         self.first_name = first_name
         self.last_name = last_name
         self.full_name = full_name
-        self.bio = bio
+        if bio is not None:
+            self.bio = bio
