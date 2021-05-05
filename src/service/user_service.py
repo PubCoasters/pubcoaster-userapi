@@ -22,6 +22,7 @@ class UserService():
     def create_user(self, body):
         try:
             pic_link = None
+            bio = None
             username = body['username']
             email = body['email']
             firstname = body['firstName']
@@ -29,7 +30,9 @@ class UserService():
             fullname = body['fullName']
             if (body['picLink']):
                 pic_link = body['picLink']
-            user = User(user_name=username, email=email, first_name=firstname, last_name=lastname, prof_pic=pic_link, full_name=fullname)
+            if (body['bio']):
+                bio = body['bio']
+            user = User(user_name=username, email=email, first_name=firstname, last_name=lastname, prof_pic=pic_link, full_name=fullname, bio=bio)
             db.session.add(user)
             db.session.commit()
             return jsonify({'statusCode': 200, 'message': 'user successfully created'})
@@ -41,18 +44,20 @@ class UserService():
     def update_user(self, body, username):
         try:
             user = User.query.filter_by(user_name=username).first()
-            if (body['username']):
-                user.user_name = body['username']
             if (body['email']):
                user.email = body['email']
             if (body['firstName']):
                 user.first_name = body['firstName']
             if (body['lastName']):
-                user.lastname = body['lastName']
+                user.last_name = body['lastName']
             if (body['fullName']):
-                user.fullname = body['fullName'] 
+                user.full_name = body['fullName'] 
+            if (body['firstName'] and body['lastName'] and not body['fullName']):
+                user.full_name = f"{body['firstName']} {body['lastName']}"
             if (body['picLink']):
                 user.pic_link = body['picLink']
+            if (body['bio']):
+                user.bio = body['bio']
             db.session.commit()
             return jsonify({'statusCode': 200, 'message': 'user successfully updated'})
         except Exception as e:
@@ -63,7 +68,7 @@ class UserService():
         try:
             user = User.query.filter_by(user_name=username).first()
             return jsonify({'username': user.user_name, 'firstName': user.first_name, 
-            'lastName': user.last_name, 'fullName': user.full_name, 'email': user.email, 'picLink': user.link_to_prof_pic})
+            'lastName': user.last_name, 'fullName': user.full_name, 'email': user.email, 'picLink': user.link_to_prof_pic, 'bio': user.bio})
         except Exception as e:
             print(e)
             return jsonify({'message': 'unable to grab post'}), 500
