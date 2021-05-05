@@ -12,7 +12,7 @@ class User(db.Model):
     full_name = db.Column(db.String(128), nullable=False)
     bio = db.Column(db.String(256), nullable=True)
 
-    def __init__(self, user_name, email, prof_pic, first_name, last_name, full_name, bio):
+    def __init__(self, user_name, email, prof_pic, first_name, last_name, full_name, bio=None):
         self.user_name = user_name
         self.email = email
         if prof_pic is not None:

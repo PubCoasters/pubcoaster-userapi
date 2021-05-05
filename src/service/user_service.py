@@ -30,9 +30,7 @@ class UserService():
             fullname = body['fullName']
             if (body['picLink']):
                 pic_link = body['picLink']
-            if (body['bio']):
-                bio = body['bio']
-            user = User(user_name=username, email=email, first_name=firstname, last_name=lastname, prof_pic=pic_link, full_name=fullname, bio=bio)
+            user = User(user_name=username, email=email, first_name=firstname, last_name=lastname, prof_pic=pic_link, full_name=fullname)
             db.session.add(user)
             db.session.commit()
             return jsonify({'statusCode': 200, 'message': 'user successfully created'})
