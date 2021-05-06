@@ -10,13 +10,15 @@ class UserBrand(db.Model):
     brand_id = db.Column(db.Integer, ForeignKey('brand.id'), primary_key=True)
     user = relationship(
         User,
-        backref=backref('user_brand'),
-        uselist=True
+        backref=backref('user_brand',
+        uselist=True,
+        cascade='delete,all')
     )
     brand = relationship(
         Brand,
-        backref=backref('user_brand'),
-        uselist=True
+        backref=backref('user_brand',
+        uselist=True,
+        cascade='delete,all')
     )
 
 
