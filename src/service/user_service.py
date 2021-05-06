@@ -65,8 +65,15 @@ class UserService():
     def get_user_by_username(self, username):
         try:
             user = User.query.filter_by(user_name=username).first()
+            if user is not None:
+                num_bars = db.session.query(db.func.count(UserBar.bar_id)).filter_by(user_name=username).scalar()
+                num_brands = db.session.query(db.func.count(UserBrand.brand_id)).filter_by(user_name=username).scalar()
+                num_drinks = db.session.query(db.func.count(UserDrink.drink_id)).filter_by(user_name=username).scalar()
+            else:
+                return jsonify({'message': 'No user exists by that username'}), 200
             return jsonify({'username': user.user_name, 'firstName': user.first_name, 
-            'lastName': user.last_name, 'fullName': user.full_name, 'email': user.email, 'picLink': user.link_to_prof_pic, 'bio': user.bio})
+            'lastName': user.last_name, 'fullName': user.full_name, 'email': user.email, 'picLink': user.link_to_prof_pic, 'bio': user.bio,
+            'numBars': num_bars, 'numBrands': num_brands, 'numDrinks': num_drinks})
         except Exception as e:
             print(e)
             return jsonify({'message': 'unable to grab post'}), 500
