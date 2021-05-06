@@ -10,13 +10,15 @@ class UserDrink(db.Model):
     drink_id = db.Column(db.Integer, ForeignKey('drink.id'), primary_key=True)
     user = relationship(
         User,
-        backref=backref('user_drink'),
-        uselist=True
+        backref=backref('user_drink',
+        uselist=True,
+        cascade='delete,all')
     )
     drink = relationship(
         Drink,
-        backref=backref('user_drink'),
-        uselist=True
+        backref=backref('user_drink',
+        uselist=True,
+        cascade='delete,all')
     )
 
     # def __init__(self, user_name, drink_id):
