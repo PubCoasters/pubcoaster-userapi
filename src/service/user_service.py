@@ -53,7 +53,7 @@ class UserService():
             if (body['firstName'] and body['lastName'] and not body['fullName']):
                 user.full_name = f"{body['firstName']} {body['lastName']}"
             if (body['picLink']):
-                user.pic_link = body['picLink']
+                user.link_to_prof_pic = body['picLink']
             if (body['bio']):
                 user.bio = body['bio']
             db.session.commit()
