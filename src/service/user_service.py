@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from src.app import db
+# from src.models.post import Post
 from src.models.bar import Bar
 from src.models.brand import Brand
 from src.models.drink import Drink
