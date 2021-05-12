@@ -172,7 +172,7 @@ class UserService():
             bars = []
             for item in bar_data.items:
                 bar = Bar.query.filter_by(id=item.bar_id).join(Location, Bar.location_id == Location.id).outerjoin(Neighborhood, Bar.neighborhood_id == Neighborhood.id).first()
-                temp = {'user': item.user_name, 'barName': bar.name, 'location': bar.location.location, 'neighborhood': bar.neighborhood.neighborhood}
+                temp = {'user': item.user_name, 'barName': bar.name, 'location': bar.location.location, 'neighborhood': bar.neighborhood.neighborhood, 'uuid': bar.uuid}
                 bars.append(temp)
             response = {'totalCount': num_bars, 'bars': bars}
             return jsonify(response)
@@ -191,7 +191,7 @@ class UserService():
             drinks = []
             for item in drink_data.items:
                 drink_name = Drink.query.filter_by(id=item.drink_id).first()
-                temp = {'user': item.user_name, 'drinkName': drink_name.name}
+                temp = {'user': item.user_name, 'drinkName': drink_name.name, 'uuid': drink_name.uuid}
                 drinks.append(temp)
             response = {'totalCount': num_drinks, 'drinks': drinks}
             return jsonify(response)
@@ -210,7 +210,7 @@ class UserService():
             brands = []
             for item in brand_data.items:
                 brand_name = Brand.query.filter_by(id=item.brand_id).first()
-                temp = {'user': item.user_name, 'brandName': brand_name.name}
+                temp = {'user': item.user_name, 'brandName': brand_name.name, 'uuid': brand_name.uuid}
                 brands.append(temp)
             response = {'totalCount': num_brands, 'brands': brands}
             return jsonify(response)
