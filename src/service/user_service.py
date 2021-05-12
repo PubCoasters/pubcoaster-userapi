@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from src.app import db
+# from src.models.post import Post
 from src.models.bar import Bar
 from src.models.brand import Brand
 from src.models.drink import Drink
@@ -170,8 +171,8 @@ class UserService():
             num_bars = db.session.query(db.func.count(UserBar.bar_id)).filter_by(user_name=user).scalar()
             bars = []
             for item in bar_data:
-                bar_name = Bar.query.filter_by(id=item.bar_id).first()
-                temp = {'user': item.user_name, 'barName': bar_name.name}
+                bar = Bar.query.filter_by(id=item.bar_id).outerjoin(Location, Bar.location_id == Location.id).outerjoin(Neighborhood, Bar.neighborhood_id == Neighborhood.id).first()
+                temp = {'user': item.user_name, 'barName': bar.name, 'location': bar.location.location, 'neighborhood': bar.neighborhood.neighborhood}
                 bars.append(temp)
             response = {'totalCount': num_bars, 'bars': bars}
             return jsonify(response)
