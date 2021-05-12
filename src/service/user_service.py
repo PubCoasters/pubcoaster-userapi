@@ -161,17 +161,17 @@ class UserService():
             return jsonify({'statusCode': 500, 'message': 'unable to create new user-drink association'})
 
 
-    def get_user_bar(self, user):
+    def get_user_bar(self, user, page):
         """
         Retrieves all the bars a user likes.
         """
         try:
-            bar_data = UserBar.query.filter_by(user_name=user).all()
+            bar_data = UserBar.query.filter_by(user_name=user).paginate(page=page, per_page=5)
             num_bars = db.session.query(db.func.count(UserBar.bar_id)).filter_by(user_name=user).scalar()
             bars = []
-            for item in bar_data:
-                bar_name = Bar.query.filter_by(id=item.bar_id).first()
-                temp = {'user': item.user_name, 'barName': bar_name.name}
+            for item in bar_data.items:
+                bar = Bar.query.filter_by(id=item.bar_id).join(Location, Bar.location_id == Location.id).outerjoin(Neighborhood, Bar.neighborhood_id == Neighborhood.id).first()
+                temp = {'user': item.user_name, 'barName': bar.name, 'location': bar.location.location, 'neighborhood': bar.neighborhood.neighborhood}
                 bars.append(temp)
             response = {'totalCount': num_bars, 'bars': bars}
             return jsonify(response)
@@ -180,15 +180,15 @@ class UserService():
             return jsonify({'statusCode': 500, 'message': 'unable to fetch user-bar associations'})
 
 
-    def get_user_drink(self, user):
+    def get_user_drink(self, user, page):
         """
         Retrieves all the drinks a user likes.
         """
         try:
-            drink_data = UserDrink.query.filter_by(user_name=user).all()
+            drink_data = UserDrink.query.filter_by(user_name=user).paginate(page=page, per_page=5)
             num_drinks = db.session.query(db.func.count(UserDrink.drink_id)).filter_by(user_name=user).scalar()
             drinks = []
-            for item in drink_data:
+            for item in drink_data.items:
                 drink_name = Drink.query.filter_by(id=item.drink_id).first()
                 temp = {'user': item.user_name, 'drinkName': drink_name.name}
                 drinks.append(temp)
@@ -199,15 +199,15 @@ class UserService():
             return jsonify({'statusCode': 500, 'message': 'unable to fetch user-drink associations'})
 
 
-    def get_user_brand(self, user):
+    def get_user_brand(self, user, page):
         """
         Retrieves all the brands a user likes.
         """
         try:
-            brand_data = UserBrand.query.filter_by(user_name=user).all()
+            brand_data = UserBrand.query.filter_by(user_name=user).paginate(page=page, per_page=5)
             num_brands = db.session.query(db.func.count(UserBrand.brand_id)).filter_by(user_name=user).scalar()
             brands = []
-            for item in brand_data:
+            for item in brand_data.items:
                 brand_name = Brand.query.filter_by(id=item.brand_id).first()
                 temp = {'user': item.user_name, 'brandName': brand_name.name}
                 brands.append(temp)

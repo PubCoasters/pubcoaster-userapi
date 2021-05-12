@@ -50,19 +50,34 @@ def user_brand():
 @app.route('/brand/<string:username>', methods=['GET'])
 @cross_origin()
 def get_user_brand(username):
-    return user_service().get_user_brand(username)
+    req_arg = request.args.get('offset')
+    if (req_arg is None):
+        page = 1
+    else:
+        page = int(req_arg)
+    return user_service().get_user_brand(username, page)
 
 
 @app.route('/drink/<string:username>', methods=['GET'])
 @cross_origin()
 def get_user_drink(username):
-    return user_service().get_user_drink(username)
+    req_arg = request.args.get('offset')
+    if (req_arg is None):
+        page = 1
+    else:
+        page = int(req_arg)
+    return user_service().get_user_drink(username, page)
 
 
 @app.route('/bar/<string:username>', methods=['GET'])
 @cross_origin()
 def get_user_bar(username):
-    return user_service().get_user_bar(username)
+    req_arg = request.args.get('offset')
+    if (req_arg is None):
+        page = 1
+    else:
+        page = int(req_arg)
+    return user_service().get_user_bar(username, page)
 
 @app.route('/user/<string:username>', methods=['GET', 'PATCH', 'DELETE'])
 @cross_origin()
