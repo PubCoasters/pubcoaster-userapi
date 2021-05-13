@@ -33,7 +33,7 @@ class UserService():
             user = User(user_name=username, email=email, first_name=firstname, last_name=lastname, prof_pic=pic_link, full_name=fullname)
             db.session.add(user)
             db.session.commit()
-            return jsonify({'statusCode': 200, 'message': 'user successfully created'})
+            return jsonify({'message': 'user successfully created'}), 200
         except Exception as e:
             print(e)  
             logging.error(e)  
@@ -57,9 +57,9 @@ class UserService():
             if (body['bio']):
                 user.bio = body['bio']
             db.session.commit()
-            return jsonify({'statusCode': 200, 'message': 'user successfully updated'})
+            return jsonify({'message': 'user successfully updated'}), 200
         except Exception as e:
-            print(e)
+            print('exception: ', e)
             return jsonify({'message': 'unable to update user'}), 500
     
     def get_user_by_username(self, username):
@@ -83,7 +83,7 @@ class UserService():
             user = User.query.filter_by(user_name=username).first()
             db.session.delete(user)
             db.session.commit()
-            return jsonify({'statusCode': 200, 'message': 'user successfully deleted'})
+            return jsonify({'message': 'user successfully deleted'}), 200
         except Exception as e:
             print(e)
             return jsonify({'message': 'unable to delete user'}), 500
@@ -114,10 +114,10 @@ class UserService():
                 user_bar = UserBar(user_name=user, bar_id=bar_id)
             db.session.add(user_bar)
             db.session.commit()
-            return jsonify({'statusCode': 200, 'message': 'user-bar association successfully created'})
+            return jsonify({'message': 'user-bar association successfully created'}), 200
         except Exception as e:
             print(e)
-            return jsonify({'statusCode': 500, 'message': 'unable to create new user-bar association'})
+            return jsonify({'message': 'unable to create new user-bar association'}), 500
 
 
     def create_user_brand(self, body):
@@ -135,10 +135,10 @@ class UserService():
                 user_brand = UserBrand(user_name=user, brand_id=brand_id)
             db.session.add(user_brand)
             db.session.commit()
-            return jsonify({'statusCode': 200, 'message': 'user-brand association successfully created'})
+            return jsonify({'message': 'user-brand association successfully created'}), 200
         except Exception as e:
             print(e)
-            return jsonify({'statusCode': 500, 'message': 'unable to create new user-brand association'})
+            return jsonify({'message': 'unable to create new user-brand association'}), 500
 
 
     def create_user_drink(self, body):
@@ -155,10 +155,10 @@ class UserService():
                 user_drink = UserDrink(user_name=user, drink_id=drink_id)
             db.session.add(user_drink)
             db.session.commit()
-            return jsonify({'statusCode': 200, 'message': 'user-drink association successfully created'})
+            return jsonify({'message': 'user-drink association successfully created'}), 200
         except Exception as e:
             print(e)
-            return jsonify({'statusCode': 500, 'message': 'unable to create new user-drink association'})
+            return jsonify({'message': 'unable to create new user-drink association'}), 500
 
 
     def get_user_bar(self, user):
@@ -177,7 +177,7 @@ class UserService():
             return jsonify(response)
         except Exception as e:
             print(e)
-            return jsonify({'statusCode': 500, 'message': 'unable to fetch user-bar associations'})
+            return jsonify({'message': 'unable to fetch user-bar associations'}), 500
 
 
     def get_user_drink(self, user):
@@ -196,7 +196,7 @@ class UserService():
             return jsonify(response)
         except Exception as e:
             print(e)
-            return jsonify({'statusCode': 500, 'message': 'unable to fetch user-drink associations'})
+            return jsonify({'message': 'unable to fetch user-drink associations'}), 500
 
 
     def get_user_brand(self, user):
@@ -215,7 +215,7 @@ class UserService():
             return jsonify(response)
         except Exception as e:
             print(e)
-            return jsonify({'statusCode': 500, 'message': 'unable to fetch user-brand associations'})
+            return jsonify({'message': 'unable to fetch user-brand associations'}), 500
 
 
     def delete_user_brand(self, body):
@@ -226,9 +226,9 @@ class UserService():
             user_brand = UserBrand.query.filter_by(user_name=user, brand_id=brand_data.id).first()
             db.session.delete(user_brand)
             db.session.commit()
-            return jsonify({'statusCode': 200, 'message': 'successfully deleted user-brand association'})
+            return jsonify({'message': 'successfully deleted user-brand association'}), 200
         except Exception as e:
-            return jsonify({'statusCode': 500, 'message': 'unable to delete user-brand association'})
+            return jsonify({'message': 'unable to delete user-brand association'}), 500
 
 
     def delete_user_drink(self, body):
@@ -239,10 +239,10 @@ class UserService():
             user_drink = UserDrink.query.filter_by(user_name=user, drink_id=drink_data.id).first()
             db.session.delete(user_drink)
             db.session.commit()
-            return jsonify({'statusCode': 200, 'message': 'successfully deleted user-drink association'})
+            return jsonify({'message': 'successfully deleted user-drink association'}), 200
         except Exception as e:
             print(e)
-            return jsonify({'statusCode': 500, 'message': 'unable to delete user-drink association'})
+            return jsonify({'message': 'unable to delete user-drink association'}), 500
 
 
     def delete_user_bar(self, body): # works
@@ -253,10 +253,10 @@ class UserService():
             user_bar = UserBar.query.filter_by(user_name=user, bar_id=bar_data.id).first()
             db.session.delete(user_bar)
             db.session.commit()
-            return jsonify({'statusCode': 200, 'message': 'successfully deleted user-bar association'})
+            return jsonify({'message': 'successfully deleted user-bar association'}), 200
         except Exception as e:
             print(e)
-            return jsonify({'statusCode': 500, 'message': 'unable to delete user-bar association'})
+            return jsonify({'message': 'unable to delete user-bar association'}), 500
 
 
 
