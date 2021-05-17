@@ -96,11 +96,15 @@ class UserService():
         bar = body['bar']
         try:
             user_bar = None
+            nbhood_data = None
             location_data = Location.query.filter_by(location=body['location']).first()
-            bar_data = Bar.query.filter_by(name=bar.lower(), location_id=location_data.id).first()
+            if 'neighborhood' in body:
+                nbhood_data = Neighborhood.query.filter_by(neighborhood=body['neighborhood'].lower()).first()
+                bar_data = Bar.query.filter_by(name=bar.lower(), location_id=location_data.id, neighborhood_id=nbhood_data.id).first()
+            else:
+                bar_data = Bar.query.filter_by(name=bar.lower(), location_id=location_data.id).first()
             if bar_data is None: # no such bar exists in our database - create
                 if 'neighborhood' in body: # neighborhood specified
-                    nbhood_data = Neighborhood.query.filter_by(neighborhood=body['neighborhood'].lower()).first()
                     if nbhood_data is not None: # neighborhood exists - create bar with it
                         bar_data = bar_service().create_bar(bar_name=bar.lower(), location_id=location_data.id, neighborhood_id=nbhood_data.id)
                     else: # neighborhood does not exist - create it and then create bar
@@ -172,7 +176,7 @@ class UserService():
             bars = []
             for item in bar_data.items:
                 bar = Bar.query.filter_by(id=item.bar_id).join(Location, Bar.location_id == Location.id).outerjoin(Neighborhood, Bar.neighborhood_id == Neighborhood.id).first()
-                temp = {'user': item.user_name, 'barName': bar.name, 'location': bar.location.location, 'neighborhood': bar.neighborhood.neighborhood, 'uuid': bar.uuid}
+                temp = {'user': item.user_name, 'barName': bar.name, 'location': bar.location.location, 'neighborhood': ('' if bar.neighborhood is None else bar.neighborhood.neighborhood), 'uuid': bar.uuid}
                 bars.append(temp)
             response = {'totalCount': num_bars, 'bars': bars}
             return jsonify(response)
@@ -210,7 +214,7 @@ class UserService():
             brands = []
             for item in brand_data.items:
                 brand_name = Brand.query.filter_by(id=item.brand_id).first()
-                temp = {'user': item.user_name, 'brandName': brand_name.name, 'uuid': brand_name.uuid}
+                temp = {'user': item.user_name, 'brandName': brand_name.name, 'uuid': brand_name.uuid, 'type': brand_name.type}
                 brands.append(temp)
             response = {'totalCount': num_brands, 'brands': brands}
             return jsonify(response)
