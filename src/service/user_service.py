@@ -182,6 +182,8 @@ class UserService():
             return jsonify(response)
         except Exception as e:
             print(e)
+            if (e.__str__() == '404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.'):
+                return jsonify({'totalCount': 0, 'bars': []})
             return jsonify({'message': 'unable to fetch user-bar associations'}), 500
 
 
@@ -201,6 +203,8 @@ class UserService():
             return jsonify(response)
         except Exception as e:
             print(e)
+            if (e.__str__() == '404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.'):
+                return jsonify({'totalCount': 0, 'drinks': []})
             return jsonify({'message': 'unable to fetch user-drink associations'}), 500
 
 
@@ -220,6 +224,8 @@ class UserService():
             return jsonify(response)
         except Exception as e:
             print(e)
+            if (e.__str__() == '404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.'):
+                return jsonify({'totalCount': 0, 'brands': []})
             return jsonify({'message': 'unable to fetch user-brand associations'}), 500
 
 
