@@ -60,7 +60,7 @@ class UserService():
             db.session.commit()
             return jsonify({'message': 'user successfully updated'}), 200
         except Exception as e:
-            print('exception: ', e)
+            print(e)
             return jsonify({'message': 'unable to update user'}), 500
     
     def get_user_by_username(self, username):
@@ -149,17 +149,14 @@ class UserService():
     def create_user_drink(self, body):
         user = body['username']
         drink = body['drink']
-        print(drink)
         try:
             user_drink = None
             drink_data = Drink.query.filter_by(name=drink.lower()).first()
-            print(drink_data.id)
             if drink_data is None: # no such drink exists in our database - create
                 drink_data = drink_service().create_drink(drink)
             # check if user - drink already exists
             user_drink_data = UserDrink.query.filter_by(user_name=user, drink_id=drink_data.id).first()
             if user_drink_data is None: # user - drink doesn't exist - create it
-                print('created drink user association')
                 user_drink = UserDrink(user_name=user, drink_id=drink_data.id)
                 db.session.add(user_drink)
                 db.session.commit()
