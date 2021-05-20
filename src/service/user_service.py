@@ -137,7 +137,7 @@ class UserService():
             # see if user - brand exists
             user_brand_data = UserBrand.query.filter_by(user_name=user, brand_id=brand_data.id).first()
             if user_brand_data is None: # user - brand doesn't exist
-                user_brand = UserBrand(user_name=user, brand_data=brand_data.id)
+                user_brand = UserBrand(user_name=user, brand_id=brand_data.id)
                 db.session.add(user_brand)
                 db.session.commit()
             return jsonify({'message': 'user-brand association successfully created'}), 200
