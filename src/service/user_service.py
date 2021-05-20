@@ -135,7 +135,7 @@ class UserService():
             if brand_data is None: # no such brand exists in our database - create
                 brand_data = brand_service().create_brand(brand.lower(), body['type']) # body['type'] is always specified and will be an empty string if not included
             # see if user - brand exists
-            user_brand_data = UserBrand.query.filter_by(user_name=user, brand_id=brand_data.id)
+            user_brand_data = UserBrand.query.filter_by(user_name=user, brand_id=brand_data.id).first()
             if user_brand_data is None: # user - brand doesn't exist
                 user_brand = UserBrand(user_name=user, brand_data=brand_data.id)
                 db.session.add(user_brand)
@@ -149,14 +149,17 @@ class UserService():
     def create_user_drink(self, body):
         user = body['username']
         drink = body['drink']
+        print(drink)
         try:
             user_drink = None
             drink_data = Drink.query.filter_by(name=drink.lower()).first()
+            print(drink_data.id)
             if drink_data is None: # no such drink exists in our database - create
                 drink_data = drink_service().create_drink(drink)
             # check if user - drink already exists
-            user_drink_data = UserDrink.query.filter_by(user_name=user, drink_id=drink_data.id)
+            user_drink_data = UserDrink.query.filter_by(user_name=user, drink_id=drink_data.id).first()
             if user_drink_data is None: # user - drink doesn't exist - create it
+                print('created drink user association')
                 user_drink = UserDrink(user_name=user, drink_id=drink_data.id)
                 db.session.add(user_drink)
                 db.session.commit()
