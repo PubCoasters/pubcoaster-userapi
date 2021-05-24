@@ -1,6 +1,6 @@
 from flask import request, jsonify
-from src.app import db
-from src.models.drink import Drink
+from app import db
+from models.drink import Drink
 from uuid import uuid4
 
 class DrinkService():

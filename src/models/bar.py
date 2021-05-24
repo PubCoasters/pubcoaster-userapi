@@ -1,8 +1,8 @@
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
-from src.app import db
-from src.models.neighborhood import Neighborhood
-from src.models.location import Location
+from app import db
+from models.neighborhood import Neighborhood
+from models.location import Location
 from uuid import uuid4
 
 class Bar(db.Model):
