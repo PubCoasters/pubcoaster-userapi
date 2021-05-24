@@ -1,8 +1,8 @@
 from sqlalchemy import Column, DateTime, String, Integer, Boolean, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
-from app import db
-from models.user import User
-from models.bar import Bar
+from src.app import db
+from src.models.user import User
+from src.models.bar import Bar
 
 class UserBar(db.Model):
     __tablename__ = 'user_bar'
@@ -10,13 +10,15 @@ class UserBar(db.Model):
     bar_id = db.Column(db.Integer, ForeignKey('bar.id'), primary_key=True)
     user = relationship(
         User,
-        backref=backref('user_bar'),
-        uselist=True
+        backref=backref('user_bar',
+        uselist=True,
+        cascade='delete,all')
     )
     bar = relationship(
         Bar,
-        backref=backref('user_bar'),
-        uselist=True
+        backref=backref('user_bar',
+        uselist=True,
+        cascade='delete,all')
     )
 
     # def __init__(self, user_name, bar_id):

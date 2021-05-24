@@ -1,20 +1,19 @@
 from flask import Flask, request, jsonify
 import json
-from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 import os
-from flask_sslify import SSLify
+# from flask_sslify import SSLify
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{Config.credentials['username']}:{Config.credentials['password']}@/{Config.credentials['schema']}?unix_socket=/cloudsql/{Config.credentials['connectionname']}"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Sahil23!@localhost/app_localdb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 cors = CORS(app)
-sslify = SSLify(app)
+# sslify = SSLify(app)
 
-from service.user_service import UserService as user_service
+from src.service.user_service import UserService as user_service
 
 
 @app.route('/test', methods=['GET'])
@@ -51,19 +50,34 @@ def user_brand():
 @app.route('/brand/<string:username>', methods=['GET'])
 @cross_origin()
 def get_user_brand(username):
-    return user_service().get_user_brand(username)
+    req_arg = request.args.get('offset')
+    if (req_arg is None):
+        page = 1
+    else:
+        page = int(req_arg)
+    return user_service().get_user_brand(username, page)
 
 
 @app.route('/drink/<string:username>', methods=['GET'])
 @cross_origin()
 def get_user_drink(username):
-    return user_service().get_user_drink(username)
+    req_arg = request.args.get('offset')
+    if (req_arg is None):
+        page = 1
+    else:
+        page = int(req_arg)
+    return user_service().get_user_drink(username, page)
 
 
 @app.route('/bar/<string:username>', methods=['GET'])
 @cross_origin()
 def get_user_bar(username):
-    return user_service().get_user_bar(username)
+    req_arg = request.args.get('offset')
+    if (req_arg is None):
+        page = 1
+    else:
+        page = int(req_arg)
+    return user_service().get_user_bar(username, page)
 
 @app.route('/user/<string:username>', methods=['GET', 'PATCH', 'DELETE'])
 @cross_origin()

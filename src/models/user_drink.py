@@ -1,8 +1,8 @@
 from sqlalchemy import Column, DateTime, String, Integer, Boolean, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
-from app import db
-from models.user import User
-from models.drink import Drink
+from src.app import db
+from src.models.user import User
+from src.models.drink import Drink
 
 class UserDrink(db.Model):
     __tablename__ = 'user_drink'
@@ -10,13 +10,15 @@ class UserDrink(db.Model):
     drink_id = db.Column(db.Integer, ForeignKey('drink.id'), primary_key=True)
     user = relationship(
         User,
-        backref=backref('user_drink'),
-        uselist=True
+        backref=backref('user_drink',
+        uselist=True,
+        cascade='delete,all')
     )
     drink = relationship(
         Drink,
-        backref=backref('user_drink'),
-        uselist=True
+        backref=backref('user_drink',
+        uselist=True,
+        cascade='delete,all')
     )
 
     # def __init__(self, user_name, drink_id):

@@ -1,21 +1,33 @@
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
-from app import db
+from src.app import db
+from src.models.neighborhood import Neighborhood
+from src.models.location import Location
 from uuid import uuid4
 
 class Bar(db.Model):
     __tablename__ = 'bar'
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(db.String(128), default=uuid4, nullable=False)
+    uuid = db.Column(db.String(128), default=str(uuid4), nullable=False)
     name = db.Column(db.String(128), nullable=False)
     address = db.Column(db.String(256), nullable=True)
     location_id = db.Column(db.Integer, ForeignKey('location.id'), nullable=False)
     type = db.Column(db.String(128), nullable=True)
     neighborhood_id = db.Column(db.Integer, ForeignKey('neighborhood.id'), nullable=True)
+    neighborhood = relationship(
+        Neighborhood,
+        backref=backref('bar',
+        uselist=True)
+    )
+    location = relationship(
+        Location,
+        backref=backref('bar',
+        uselist=True)
+    )
 
 
-    def __init__(self, name, location_id, neighborhood_id=None, address=None, type=None): # EDIT: took out id, uuid - made address, neighborhood_id, and type optional
-        # self.id = id
+    def __init__(self, uuid, name, location_id, neighborhood_id=None, address=None, type=None): # EDIT: took out id, uuid - made address, neighborhood_id, and type optional
+        self.uuid = uuid
         self.name = name
         if address is not None:
             self.address = address

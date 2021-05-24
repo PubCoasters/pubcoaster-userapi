@@ -1,6 +1,6 @@
 from sqlalchemy import Column, DateTime, String, Integer, Boolean, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
-from app import db
+from src.app import db
 from uuid import uuid4
 
 class Brand(db.Model):
@@ -10,8 +10,7 @@ class Brand(db.Model):
     name = db.Column(db.String(128), nullable=False)
     type = db.Column(db.String(128), nullable=False)
 
-    # def __init__(self, id, uuid, name, type):
-    #     self.id = id
-    #     self.uuid = uuid
-    #     self.name = name
-    #     self.type = type
+    def __init__(self, uuid, name, type):
+        self.uuid = uuid
+        self.name = name
+        self.type = type
