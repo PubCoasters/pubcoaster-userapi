@@ -94,9 +94,14 @@ class UserService():
                 num_following = db.session.query(db.func.count(Follower.following_user)).filter_by(follower_user=username).scalar()
             else:
                 return jsonify({'message': 'No user exists by that username'}), 200
-            return jsonify({'username': user.user_name, 'firstName': user.first_name, 
-            'lastName': user.last_name, 'fullName': user.full_name, 'email': user.email, 'picLink': user.link_to_prof_pic, 'bio': user.bio,
-            'numBars': num_bars, 'numBrands': num_brands, 'numDrinks': num_drinks, 'numFollowers': num_followers, 'numFollowing': num_following, 'following': following})
+            if (username == my_user):
+                return jsonify({'username': user.user_name, 'firstName': user.first_name, 
+                'lastName': user.last_name, 'fullName': user.full_name, 'email': user.email, 'picLink': user.link_to_prof_pic, 'bio': user.bio,
+                'numBars': num_bars, 'numBrands': num_brands, 'numDrinks': num_drinks, 'numFollowers': num_followers, 'numFollowing': num_following})
+            else:
+                return jsonify({'username': user.user_name, 'firstName': user.first_name, 
+                'lastName': user.last_name, 'fullName': user.full_name, 'email': user.email, 'picLink': user.link_to_prof_pic, 'bio': user.bio,
+                'numBars': num_bars, 'numBrands': num_brands, 'numDrinks': num_drinks, 'numFollowers': num_followers, 'numFollowing': num_following, 'following': following})
        except Exception as e:
             print(e)
             return jsonify({'message': 'unable to grab user info'}), 500 
