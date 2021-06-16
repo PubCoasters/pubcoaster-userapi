@@ -82,6 +82,25 @@ class UserService():
             print(e)
             return jsonify({'message': 'unable to grab user info'}), 500
     
+    def search_user(self, username, my_user):
+       try:
+            user = User.query.filter_by(user_name=username).first()
+            if user is not None:
+                following = my_user in (obj.follower_user for obj in user.following)
+                num_bars = db.session.query(db.func.count(UserBar.bar_id)).filter_by(user_name=username).scalar()
+                num_brands = db.session.query(db.func.count(UserBrand.brand_id)).filter_by(user_name=username).scalar()
+                num_drinks = db.session.query(db.func.count(UserDrink.drink_id)).filter_by(user_name=username).scalar()
+                num_followers = db.session.query(db.func.count(Follower.follower_user)).filter_by(following_user=username).scalar()
+                num_following = db.session.query(db.func.count(Follower.following_user)).filter_by(follower_user=username).scalar()
+            else:
+                return jsonify({'message': 'No user exists by that username'}), 200
+            return jsonify({'username': user.user_name, 'firstName': user.first_name, 
+            'lastName': user.last_name, 'fullName': user.full_name, 'email': user.email, 'picLink': user.link_to_prof_pic, 'bio': user.bio,
+            'numBars': num_bars, 'numBrands': num_brands, 'numDrinks': num_drinks, 'numFollowers': num_followers, 'numFollowing': num_following, 'following': following})
+       except Exception as e:
+            print(e)
+            return jsonify({'message': 'unable to grab user info'}), 500 
+    
     def delete_user(self, username):
         try:
             user = User.query.filter_by(user_name=username).first()
