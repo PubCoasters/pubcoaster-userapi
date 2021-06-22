@@ -1,20 +1,19 @@
 from flask import request, jsonify
-from src.app import db
-# from src.models.post import Post
-from src.models.bar import Bar
-from src.models.brand import Brand
-from src.models.drink import Drink
-from src.models.user import User
-from src.models.user_bar import UserBar
-from src.models.user_brand import UserBrand
-from src.models.user_drink import UserDrink
-from src.models.follower import Follower
-from src.models.location import Location
-from src.models.neighborhood import Neighborhood
-from src.service.bar_service import BarService as bar_service
-from src.service.neighborhood_service import NeighborhoodService as neighborhood_service
-from src.service.drink_service import DrinkService as drink_service
-from src.service.brand_service import BrandService as brand_service
+from app import db
+# from models.post import Post
+from models.bar import Bar
+from models.brand import Brand
+from models.drink import Drink
+from models.user import User
+from models.user_bar import UserBar
+from models.user_brand import UserBrand
+from models.user_drink import UserDrink
+from models.location import Location
+from models.neighborhood import Neighborhood
+from service.bar_service import BarService as bar_service
+from service.neighborhood_service import NeighborhoodService as neighborhood_service
+from service.drink_service import DrinkService as drink_service
+from service.brand_service import BrandService as brand_service
 from sqlalchemy import func
 import logging
 
