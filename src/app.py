@@ -80,6 +80,12 @@ def get_user_bar(username):
         page = int(req_arg)
     return user_service().get_user_bar(username, page)
 
+@app.route('/searchuser/<string:username>', methods=['GET'])
+@cross_origin()
+def search_user(username):
+    my_user = request.headers.get('user')
+    return user_service().search_user(username=username, my_user=my_user)
+
 @app.route('/user/<string:username>', methods=['GET', 'PATCH', 'DELETE'])
 @cross_origin()
 def user(username):
