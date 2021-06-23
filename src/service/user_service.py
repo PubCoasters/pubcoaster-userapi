@@ -1,6 +1,7 @@
 from flask import request, jsonify
 from app import db
 # from models.post import Post
+from models.follower import Follower
 from models.bar import Bar
 from models.brand import Brand
 from models.drink import Drink
